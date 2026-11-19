@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Событие — event-агентство</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --font-display: "Unbounded", sans-serif;
+      --font-text: "Manrope", sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      background: #000;
+      font-family: var(--font-text);
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .hero__video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero__shade {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0.58) 0%,
+          rgba(0, 0, 0, 0.28) 38%,
+          rgba(0, 0, 0, 0.1) 64%,
+          rgba(0, 0, 0, 0.16) 100%
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.4) 0%,
+          rgba(0, 0, 0, 0) 150px
+        );
+    }
+
+    .hero__content {
+      position: absolute;
+      z-index: 2;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: min(640px, 58%);
+      padding: 96px 24px 48px 72px;
+      color: #F7F4EE;
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4.4vw, 64px);
+      font-weight: 500;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+
+    .hero__line {
+      display: block;
+    }
+
+    .hero__word {
+      animation: hero-word 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero__line span {
+      display: inline-block;
+      white-space: nowrap;
+      transform-origin: left center;
+      animation: hero-title 1.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .hero__line:nth-child(1) span { animation-delay: 0.35s; }
+    .hero__line:nth-child(2) span { animation-delay: 0.52s; }
+    .hero__line:nth-child(3) span { animation-delay: 0.69s; }
+    .hero__line:nth-child(4) span { animation-delay: 0.86s; }
+
+    .hero__word {
+      display: inline-block;
+    }
+
+    .hero__text .hero__word:nth-child(1) { animation-delay: 2s; }
+    .hero__text .hero__word:nth-child(2) { animation-delay: 2.1s; }
+    .hero__text .hero__word:nth-child(3) { animation-delay: 2.2s; }
+    .hero__text .hero__word:nth-child(4) { animation-delay: 2.3s; }
+    .hero__text .hero__word:nth-child(5) { animation-delay: 2.4s; }
+    .hero__text .hero__word:nth-child(6) { animation-delay: 2.5s; }
+    .hero__text .hero__word:nth-child(7) { animation-delay: 2.6s; }
+    .hero__text .hero__word:nth-child(8) { animation-delay: 2.7s; }
+    .hero__text .hero__word:nth-child(9) { animation-delay: 2.8s; }
+    .hero__text .hero__word:nth-child(10) { animation-delay: 2.9s; }
+    .hero__text .hero__word:nth-child(11) { animation-delay: 3s; }
+    .hero__text .hero__word:nth-child(12) { animation-delay: 3.1s; }
+
+    .hero__text {
+      max-width: 36em;
+      margin-top: 18px;
+      font-family: var(--font-text);
+      font-size: 18px;
+      line-height: 1.5;
+      color: rgba(247, 244, 238, 0.88);
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border: 1px solid transparent;
+      border-radius: 0;
+      font-family: var(--font-text);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid #F7F4EE;
+      outline-offset: 3px;
+    }
+
+    .btn--primary {
+      background: #E10B32;
+      color: #fff;
+    }
+
+    .btn--primary:hover {
+      background: #c40a2b;
+    }
+
+    .btn--ghost {
+      background: #fff;
+      color: #2A3031;
+    }
+
+    .btn--ghost:hover {
+      background: #ECECE6;
+    }
+
+    .hero__form-wrap {
+      position: absolute;
+      z-index: 2;
+      top: 100px;
+      right: 48px;
+      bottom: 24px;
+      display: flex;
+      align-items: center;
+      width: min(460px, 42vw);
+    }
+
+    .hero__form {
+      width: 100%;
+      padding: 22px 22px 20px;
+      background: #fff;
+      color: #2A3031;
+    }
+
+    .hero__form-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 1.15;
+    }
+
+    .hero__field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 12px;
+      font-family: var(--font-text);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .hero__field input {
+      width: 100%;
+      height: 44px;
+      padding: 0 12px;
+      border: 1px solid #D5D3CC;
+      border-radius: 0;
+      background: #fff;
+      color: #2A3031;
+      font: 15px/1.2 var(--font-text);
+      font-weight: 400;
+    }
+
+    .hero__field input:focus {
+      outline: 2px solid #E10B32;
+      outline-offset: 1px;
+      border-color: #E10B32;
+    }
+
+    .hero__form .btn {
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    .hero__form-success {
+      margin-top: 16px;
+      font-family: var(--font-text);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .hero__video {
+      transform-origin: center center;
+      animation: hero-video 2.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .nav__logo {
+      animation: hero-logo 1.2s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero__actions .btn {
+      animation: hero-soft 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero__actions .btn:nth-child(1) { animation-delay: 3.25s; }
+    .hero__actions .btn:nth-child(2) { animation-delay: 3.38s; }
+
+    .hero__form {
+      animation: hero-form 1.2s 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes hero-video {
+      from {
+        opacity: 0;
+        transform: scale(1.08);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes hero-logo {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.94);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes hero-title {
+      from {
+        opacity: 0;
+        transform: scale(1.08);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes hero-word {
+      from {
+        opacity: 0;
+        transform: translateY(0.12em);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes hero-soft {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes hero-form {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.985);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero__video,
+      .nav__logo,
+      .hero__line span,
+      .hero__word,
+      .hero__actions .btn,
+      .hero__form {
+        animation: none;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .hero {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow: visible;
+      }
+
+      .hero__content {
+        position: relative;
+        width: 100%;
+        justify-content: flex-start;
+        padding: 108px 20px 28px;
+      }
+
+      .hero__title {
+        font-size: 34px;
+      }
+
+      .hero__text {
+        font-size: 16px;
+      }
+
+      .hero__form-wrap {
+        position: relative;
+        top: auto;
+        right: auto;
+        bottom: auto;
+        width: auto;
+        display: block;
+        margin: 0 20px 28px;
+      }
+    }
+
+    .nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 24px 0;
+      background: transparent;
+    }
+
+    .nav__logo-link {
+      display: flex;
+      line-height: 0;
+    }
+
+    .nav__logo {
+      height: 72px;
+      width: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <section class="hero" aria-label="Главный экран">
+    <video
+      class="hero__video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    >
+      <source src="videos/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero__shade" aria-hidden="true"></div>
+    <header class="nav">
+      <a class="nav__logo-link" href="/" aria-label="Событие — на главную">
+        <img class="nav__logo" src="images/logo-nav.png" alt="Событие, event-агентство">
+      </a>
+    </header>
+    <div class="hero__content">
+      <h1 class="hero__title">
+        <span class="hero__line"><span>Создаём</span></span>
+        <span class="hero__line"><span>мероприятия,</span></span>
+        <span class="hero__line"><span>которые</span></span>
+        <span class="hero__line"><span>запоминаются</span></span>
+      </h1>
+      <p class="hero__text">
+        <span class="hero__word">Собираем</span>
+        <span class="hero__word">идею,</span>
+        <span class="hero__word">атмосферу</span>
+        <span class="hero__word">и</span>
+        <span class="hero__word">организацию</span>
+        <span class="hero__word">так,</span>
+        <span class="hero__word">чтобы</span>
+        <span class="hero__word">праздник</span>
+        <span class="hero__word">остался</span>
+        <span class="hero__word">с</span>
+        <span class="hero__word">гостями</span>
+        <span class="hero__word">надолго.</span>
+      </p>
+      <div class="hero__actions">
+        <button type="button" class="btn btn--primary" data-scroll-form>Связаться</button>
+        <button type="button" class="btn btn--ghost">Подробнее</button>
+      </div>
+    </div>
+    <div class="hero__form-wrap">
+      <form class="hero__form" id="request">
+        <h2 class="hero__form-title">Оставить заявку</h2>
+        <div class="hero__form-fields">
+          <label class="hero__field">
+            Имя
+            <input type="text" name="name" autocomplete="name" required>
+          </label>
+          <label class="hero__field">
+            Какое мероприятие нужно организовать
+            <input type="text" name="event" required>
+          </label>
+          <label class="hero__field">
+            Номер телефона
+            <input type="tel" name="phone" autocomplete="tel" required>
+          </label>
+          <label class="hero__field">
+            Ник в мессенджере
+            <input type="text" name="messenger" autocomplete="off" required>
+          </label>
+          <button type="submit" class="btn btn--primary">Оставить заявку</button>
+        </div>
+        <p class="hero__form-success" hidden>Спасибо. Мы свяжемся с вами.</p>
+      </form>
+    </div>
+  </section>
+  <script>
+    const requestForm = document.querySelector("#request");
+    const contactButton = document.querySelector("[data-scroll-form]");
+
+    contactButton.addEventListener("click", () => {
+      requestForm.scrollIntoView({ behavior: "smooth", block: "center" });
+      requestForm.querySelector("input").focus({ preventScroll: true });
+    });
+
+    requestForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      requestForm.querySelector(".hero__form-fields").hidden = true;
+      requestForm.querySelector(".hero__form-success").hidden = false;
+    });
+  </script>
+</body>
+</html>
