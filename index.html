@@ -444,6 +444,11 @@
       gap: 6px;
       margin-bottom: 14px;
       overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .flow__tabs::-webkit-scrollbar {
+      display: none;
     }
 
     .flow__tab {
@@ -546,11 +551,24 @@
       overflow: hidden;
     }
 
-    .flow__cell img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    .flow__gallery--business {
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1.45fr 1fr;
+    }
+
+    .flow__gallery--business .flow__cell:nth-child(1) {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+
+    .flow__gallery--corp {
+      grid-template-columns: 0.82fr 1.4fr;
+      grid-template-rows: 1fr 1fr 1fr;
+    }
+
+    .flow__gallery--corp .flow__cell:nth-child(1) {
+      grid-column: 2;
+      grid-row: 1 / span 3;
     }
 
     .flow__gallery--private {
@@ -583,14 +601,9 @@
       grid-row: 3;
     }
 
-    .flow__gallery--corp {
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 1.45fr 1fr;
-    }
-
-    .flow__gallery--corp .flow__cell:nth-child(1) {
-      grid-column: 1 / -1;
-      grid-row: 1;
+    .flow__gallery--fest {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
     }
 
     .flow__gallery--wed {
@@ -606,16 +619,6 @@
     .flow__gallery--wed .flow__cell:nth-child(4) {
       grid-column: 1 / -1;
       grid-row: 3;
-    }
-
-    .flow__gallery--out {
-      grid-template-columns: 0.82fr 1.4fr;
-      grid-template-rows: 1fr 1fr 1fr;
-    }
-
-    .flow__gallery--out .flow__cell:nth-child(1) {
-      grid-column: 2;
-      grid-row: 1 / span 3;
     }
 
     .flow__gallery--own {
@@ -726,55 +729,100 @@
   <section class="flow" id="how" aria-label="Как проходят мероприятия">
     <div class="flow__inner">
       <div class="flow__tabs" role="tablist" aria-label="Формат мероприятия">
-        <button class="flow__tab" type="button" role="tab" id="tab-private" aria-controls="panel-private" aria-selected="true">Частные</button>
+        <button class="flow__tab" type="button" role="tab" id="tab-business" aria-controls="panel-business" aria-selected="true">Деловые</button>
         <button class="flow__tab" type="button" role="tab" id="tab-corp" aria-controls="panel-corp" aria-selected="false">Корпоративные</button>
+        <button class="flow__tab" type="button" role="tab" id="tab-private" aria-controls="panel-private" aria-selected="false">Частные</button>
+        <button class="flow__tab" type="button" role="tab" id="tab-fest" aria-controls="panel-fest" aria-selected="false">Фестивали</button>
         <button class="flow__tab" type="button" role="tab" id="tab-wed" aria-controls="panel-wed" aria-selected="false">Свадьбы</button>
-        <button class="flow__tab" type="button" role="tab" id="tab-out" aria-controls="panel-out" aria-selected="false">Выездные</button>
         <button class="flow__tab" type="button" role="tab" id="tab-own" aria-controls="panel-own" aria-selected="false">Свой формат</button>
       </div>
       <div class="flow__card">
-          <div class="flow__panel" id="panel-private" role="tabpanel" aria-labelledby="tab-private">
+          <div class="flow__panel" id="panel-business" role="tabpanel" aria-labelledby="tab-business">
             <div class="flow__copy">
-              <h2 class="flow__title">Вечер, о котором вспоминают</h2>
-              <p class="flow__accent">от первого тоста до последнего танца</p>
-              <p class="flow__lead">Собираем ход вечера заранее: встречу гостей, свет, музыку и паузы между тостами. Вы остаётесь с близкими, а тайминг и мелочи держим мы.</p>
-              <button class="btn btn--primary" type="button" data-fill-event="Частный праздник">Обсудить частный вечер</button>
+              <h2 class="flow__title">День, на котором вас видно</h2>
+              <p class="flow__accent">выставки, форумы и конференции</p>
+              <p class="flow__lead">Собираем деловую программу: регистрацию, стенды, сцену и переходы между блоками. Гости видят порядок, а подготовка остаётся за кадром.</p>
+              <button class="btn btn--primary" type="button" data-fill-event="Деловое мероприятие">Обсудить деловой формат</button>
             </div>
             <div class="flow__media">
-              <div class="flow__gallery flow__gallery--private">
-                <div class="flow__cell"><img src="images/events/event-3.jpg" alt="Накрытый стол к ужину" style="object-position: 68% 42%"></div>
-                <div class="flow__cell"><img src="images/events/event-1.jpg" alt="Микрофон и цветочная арка на празднике" style="object-position: 42% 48%"></div>
-                <div class="flow__cell"><img src="images/events/event-4.jpg" alt="Пульт звукорежиссёра во время мероприятия" style="object-position: 70% 55%"></div>
-                <div class="flow__cell"><img src="images/events/event-5.jpg" alt="Подготовка съёмки на большой площадке" style="object-position: 58% 42%"></div>
-                <div class="flow__cell"><img src="images/events/event-8.jpg" alt="Площадка перед началом вечера" style="object-position: center 28%"></div>
+              <div class="flow__gallery flow__gallery--business" role="img" aria-label="Место для фотографий">
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
               </div>
               <div class="flow__tags">
-                <span class="flow__tag">День рождения</span>
-                <span class="flow__tag">Девичник</span>
-                <span class="flow__tag">Ужин</span>
-                <span class="flow__tag">Годовщина</span>
+                <span class="flow__tag">Выставка</span>
+                <span class="flow__tag">Форум</span>
+                <span class="flow__tag">Конференция</span>
+                <span class="flow__tag">Деловая сессия</span>
               </div>
             </div>
           </div>
           <div class="flow__panel" id="panel-corp" role="tabpanel" aria-labelledby="tab-corp" hidden>
             <div class="flow__copy">
-              <h2 class="flow__title">День, после которого команда ближе</h2>
-              <p class="flow__accent">программа под задачу, а не шаблон</p>
-              <p class="flow__lead">Выстраиваем день вокруг цели: представить продукт, отметить год или просто собрать людей без спешки. Сцена, посадка и переходы не разваливаются по ходу.</p>
+              <h2 class="flow__title">Официальный день по регламенту</h2>
+              <p class="flow__accent">юбилей, корпоратив, закрытая встреча</p>
+              <p class="flow__lead">Держим посадку, сцену и переходы. Юбилей банка, корпоратив или отраслевая встреча идут по программе, без пауз, которые приходится заполнять на ходу.</p>
               <button class="btn btn--primary" type="button" data-fill-event="Корпоратив">Обсудить корпоратив</button>
             </div>
             <div class="flow__media">
-              <div class="flow__gallery flow__gallery--corp">
-                <div class="flow__cell"><img src="images/events/event-5.jpg" alt="Большая площадка и съёмочная группа" style="object-position: center 38%"></div>
-                <div class="flow__cell"><img src="images/events/event-4.jpg" alt="Звуковой пульт на корпоративе" style="object-position: 30% 60%"></div>
-                <div class="flow__cell"><img src="images/events/event-1.jpg" alt="Сцена с микрофоном" style="object-position: 18% 40%"></div>
-                <div class="flow__cell"><img src="images/events/event-3.jpg" alt="Посадка гостей за столом" style="object-position: 78% 50%"></div>
+              <div class="flow__gallery flow__gallery--corp" role="img" aria-label="Место для фотографий">
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
               </div>
               <div class="flow__tags">
                 <span class="flow__tag">Корпоратив</span>
-                <span class="flow__tag">Презентация</span>
-                <span class="flow__tag">Тимбилдинг</span>
+                <span class="flow__tag">Юбилей</span>
+                <span class="flow__tag">Клининг</span>
                 <span class="flow__tag">Награждение</span>
+              </div>
+            </div>
+          </div>
+          <div class="flow__panel" id="panel-private" role="tabpanel" aria-labelledby="tab-private" hidden>
+            <div class="flow__copy">
+              <h2 class="flow__title">Вечер для своих</h2>
+              <p class="flow__accent">спокойный ход, без лишней суеты</p>
+              <p class="flow__lead">Собираем частный праздник заранее: встречу гостей, свет, музыку и паузы в программе. Вы остаётесь с близкими, а тайминг и мелочи держим мы.</p>
+              <button class="btn btn--primary" type="button" data-fill-event="Частный праздник">Обсудить частный вечер</button>
+            </div>
+            <div class="flow__media">
+              <div class="flow__gallery flow__gallery--private" role="img" aria-label="Место для фотографий">
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+              </div>
+              <div class="flow__tags">
+                <span class="flow__tag">День рождения</span>
+                <span class="flow__tag">Годовщина</span>
+                <span class="flow__tag">Ужин</span>
+                <span class="flow__tag">Встреча</span>
+              </div>
+            </div>
+          </div>
+          <div class="flow__panel" id="panel-fest" role="tabpanel" aria-labelledby="tab-fest" hidden>
+            <div class="flow__copy">
+              <h2 class="flow__title">Площадка живёт весь день</h2>
+              <p class="flow__accent">фестиваль по зонам, а не одним залом</p>
+              <p class="flow__lead">Вход, сцена, точки программы и переход между ними. Потоки гостей не смешиваются, а расписание держится до закрытия площадки.</p>
+              <button class="btn btn--primary" type="button" data-fill-event="Фестиваль">Обсудить фестиваль</button>
+            </div>
+            <div class="flow__media">
+              <div class="flow__gallery flow__gallery--fest" role="img" aria-label="Место для фотографий">
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+              </div>
+              <div class="flow__tags">
+                <span class="flow__tag">Фестиваль</span>
+                <span class="flow__tag">Городская площадка</span>
+                <span class="flow__tag">Несколько зон</span>
+                <span class="flow__tag">Открытый формат</span>
               </div>
             </div>
           </div>
@@ -786,11 +834,11 @@
               <button class="btn btn--primary" type="button" data-fill-event="Свадьба">Обсудить свадьбу</button>
             </div>
             <div class="flow__media">
-              <div class="flow__gallery flow__gallery--wed">
-                <div class="flow__cell"><img src="images/events/event-1.jpg" alt="Цветочная арка и микрофон для церемонии" style="object-position: 22% 55%"></div>
-                <div class="flow__cell"><img src="images/events/event-3.jpg" alt="Сервировка банкетного стола" style="object-position: 72% 35%"></div>
-                <div class="flow__cell"><img src="images/events/event-4.jpg" alt="Свет и звук во время праздника" style="object-position: 80% 40%"></div>
-                <div class="flow__cell"><img src="images/events/event-3.jpg" alt="Бокалы и приборы на столе" style="object-position: 62% 58%"></div>
+              <div class="flow__gallery flow__gallery--wed" role="img" aria-label="Место для фотографий">
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
               </div>
               <div class="flow__tags">
                 <span class="flow__tag">Церемония</span>
@@ -800,47 +848,25 @@
               </div>
             </div>
           </div>
-          <div class="flow__panel" id="panel-out" role="tabpanel" aria-labelledby="tab-out" hidden>
-            <div class="flow__copy">
-              <h2 class="flow__title">Площадка может быть любой</h2>
-              <p class="flow__accent">привозим атмосферу с собой</p>
-              <p class="flow__lead">Дом, шатёр, крыша или зал — собираем посадку, технику и свет на месте. Место остаётся вашим, ход вечера берём на себя.</p>
-              <button class="btn btn--primary" type="button" data-fill-event="Выездное мероприятие">Обсудить выезд</button>
-            </div>
-            <div class="flow__media">
-              <div class="flow__gallery flow__gallery--out">
-                <div class="flow__cell"><img src="images/events/event-5.jpg" alt="Выезд на большую площадку" style="object-position: 40% 45%"></div>
-                <div class="flow__cell"><img src="images/events/event-1.jpg" alt="Оформление площадки цветами" style="object-position: 12% 30%"></div>
-                <div class="flow__cell"><img src="images/events/event-3.jpg" alt="Стол, собранный на месте" style="object-position: 55% 40%"></div>
-                <div class="flow__cell"><img src="images/events/event-4.jpg" alt="Техника, которую привозим с собой" style="object-position: 62% 70%"></div>
-              </div>
-              <div class="flow__tags">
-                <span class="flow__tag">За городом</span>
-                <span class="flow__tag">Лофт</span>
-                <span class="flow__tag">Шатёр</span>
-                <span class="flow__tag">Крыша</span>
-              </div>
-            </div>
-          </div>
           <div class="flow__panel" id="panel-own" role="tabpanel" aria-labelledby="tab-own" hidden>
             <div class="flow__copy">
               <h2 class="flow__title">Формат собираем под вас</h2>
               <p class="flow__accent">если готового сценария нет</p>
-              <p class="flow__lead">Расскажите, какой день нужен. Из идеи, гостей и места соберём ход: что происходит сначала, где пауза и чем вечер заканчивается.</p>
+              <p class="flow__lead">Расскажите, какой день нужен. Из задачи, гостей и места соберём ход: что происходит сначала, где пауза и чем день заканчивается.</p>
               <button class="btn btn--primary" type="button" data-fill-event="Свой формат">Описать свой формат</button>
             </div>
             <div class="flow__media">
-              <div class="flow__gallery flow__gallery--own">
-                <div class="flow__cell"><img src="images/events/event-8.jpg" alt="Площадка под нестандартный формат" style="object-position: 70% 30%"></div>
-                <div class="flow__cell"><img src="images/events/event-1.jpg" alt="Деталь оформления вечера" style="object-position: 38% 42%"></div>
-                <div class="flow__cell"><img src="images/events/event-4.jpg" alt="Управление светом и звуком" style="object-position: 20% 45%"></div>
-                <div class="flow__cell"><img src="images/events/event-3.jpg" alt="Камерная посадка гостей" style="object-position: 72% 42%"></div>
+              <div class="flow__gallery flow__gallery--own" role="img" aria-label="Место для фотографий">
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
+                <div class="flow__cell"></div>
               </div>
               <div class="flow__tags">
                 <span class="flow__tag">Идея с нуля</span>
                 <span class="flow__tag">Несколько дней</span>
                 <span class="flow__tag">Закрытый формат</span>
-                <span class="flow__tag">Сюрприз</span>
+                <span class="flow__tag">Смешанная программа</span>
               </div>
             </div>
           </div>
